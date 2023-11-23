@@ -21,4 +21,4 @@ perl Create_alignment_strings_multiBLAST.pl B71v2_masked.fasta B71v2_BLAST
 ```bash
 perl Generate_FASTA.pl Meyer_et_al_StrainList.txt B71v2_SNPs B71v2.B71v2_BLAST_alignments
 ```
-5. Buuild phylogenetic tree using RAXML:
+5. Build phylogenetic tree using RAXML:
