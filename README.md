@@ -1,7 +1,7 @@
 # PyriculariaGenomes
 Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 ## Variant Calling
-SNPs were called from amsked genome alignments using the StrictUnique4 module from iSNP caller.
+SNPs were called from masked genome alignments using the StrictUnique4 module from iSNP caller.
 1. BLAST masked reference genome against assemblies:
 ```bash
 mkdir B71v2_BLAST
