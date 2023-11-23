@@ -8,6 +8,7 @@ mkdir B71v2_BLAST
 cd MASKED_GENOMES
 for f in `ls *fasta | grep -v ^Cr`; do blastn -query ../B71v2_masked.fasta -subject $f -evalue 1e-20 -max_target_seqs 20000 -outfmt '6 qseqid sseqid qstart qend sstart send btop' > ../B71v2_BLAST/B71v2.${f/_*/}.BLAST; done
 for f in `ls Cr*fasta`; do blastn -query ../B71v2_masked.fasta -subject $f -evalue 1e-20 -max_target_seqs 20000 -outfmt '6 qseqid sseqid qstart qend sstart send btop' > ../B71v2_BLAST/B71v2.${f/_*/}.BLAST; done
+```
 2. Call SNPs:
 ```bash
 cd ..
