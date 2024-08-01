@@ -3,11 +3,11 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 ## Secerted Protein Prediction
 1. Run SignalP5 on maker protein models:
 ```bash
-for f in `ls *fasta`; do signalp -fasta $f -format short -prefix ${f/[_-]*/}; done
+signalp -fasta <maker-proteins.fasta> -format short -prefix <genome-ID>
 ```
 2. Count secreted proteins:
 ```bash
-for f in `ls *signalp5`; do echo $f | tr "\n" "\t"; awk '$2 ~ /^SP/' $f |  wc -l; done
+f=`ls <signalP-summary-file>`; echo ${f/_*/} | tr "\n" "\t"; awk '$2 ~ /^SP/' $f |  wc -l
 ```
 ## Variant Calling
 SNPs were called from masked genome alignments using the StrictUnique4 module from iSNP caller.
