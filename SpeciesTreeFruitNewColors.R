@@ -10,8 +10,6 @@ library(ggtext)
 
 # Set complimentary color palettes for host-of-origin and clade affinities
 
-
-
 hostcolors <- c(
   "mediumpurple4", #Avena
   "#E31A1C", # Bromus
@@ -39,8 +37,6 @@ hostcolors <- c(
 )
 
 names(hostcolors) <- scan(text = "Avena Bromus Cenchrus Cynodon Digitaria Echinochloa Eleusine Elionorus Eragrostis Hakonechloa Leersia Leptochloa Lolium Luziola Melinis Oryza Panicum Paspalum Setaria Stenotaphrum Triticum Urochloa Zea", what = "")
-
-teals <- c( "#005F5F", "#008080", "#20B2AA","#40E0D0", "#7DF9FF")
 
 cladecolors <- c(
   "#20B2AA",  # Cynodon1
@@ -73,6 +69,7 @@ cladeOrder <- c("Oryza", "Leersia", "Panicum2", "Setaria", "Panicum", "Urochloa2
 # Read in tree data
 Tree1 <- read.tree("~/Poryzae.support")
 
+# drop tip from recombinant rice pathogen (possible lab strain?)
 Tree1 <- drop.tip(Tree1, tip = "87-120")
 
 # Read in metadata
