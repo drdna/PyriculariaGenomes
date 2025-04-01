@@ -71,12 +71,12 @@ names(cladecolors) <- scan(text = "Cynodon1 Cynodon2 Echinochloa Eleusine1 Eleus
 cladeOrder <- c("Oryza", "Leersia", "Panicum2", "Setaria", "Panicum", "Urochloa2", "Cynodon1", "Lolium3", "Stenotaphrum", "Urochloa3", "Urochloa1", "Cynodon2", "Melinis", "Eleusine3", "Echinochloa", "Lolium2", "Eragrostis", "Eleusine1", "Eleusine2", "Triticum", "Lolium")
 
 # Read in tree data
-Tree1 <- read.tree("~/PoABTrr_bestTree.support")
+Tree1 <- read.tree("~/Poryzae.support")
 
 Tree1 <- drop.tip(Tree1, tip = "87-120")
 
 # Read in metadata
-tipdata <- read.table("~/PoTreeStrains.txt")
+tipdata <- read.table("~/PoryzaeMetadata.txt")
 colnames(tipdata) <- c("strain", "hostID", "cladeID")
 tipdata$strain = factor(tipdata$strain)
 tipdata$hostID <- factor(tipdata$hostID)
@@ -138,10 +138,10 @@ p4 <- p3 #+ coord_fixed(ratio = 2)
 species <- c("P.grisea", "P.oryzae", "P.penniseticola", "P.pennisetigena", "P.urashimae", "P.zingibericola", "Ps.cyperi", "Ps.javanica")
 
 # Read tree
-Tree2 <- read.tree("~/PyriculariaRerooted.support")
+Tree2 <- read.tree("~/Pyricularia.support")
 
 # Read in metadata
-data <- read.table("~/metadata.txt", header =T, sep = "", quote="",  comment.char = "", stringsAsFactors = FALSE)
+data <- read.table("~/PyriculariaMetadata.txt", header =T, sep = "", quote="",  comment.char = "", stringsAsFactors = FALSE)
 speciesdata <- data %>% select(c("strain", "species", "color"))
 speciesdata$species <- factor(speciesdata$species, levels = species)
                             
