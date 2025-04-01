@@ -32,5 +32,17 @@ perl Generate_FASTA.pl PoTreeStrains.txt B71v2_SNPs B71v2.B71v2_BLAST_alignments
 ```
 5. Build phylogenetic tree using RAXML:
 ```bash
-code
+fasta=<fasta_file>
+prefix=<outputFilePrefix>
+raxmlHPC-PTHREADS /Applications/standard-RAxML-master/raxmlHPC-PTHREADS -T 12 -m GTRCAT -n $prefix -s $fasta -p 1234 -f a -x 4321 -# autoMRE
 ```
+6. Add support values to nodes/branches:
+```bash
+besttree=<bestTreeFile>
+bstrees=<bootstrapTreesFile>
+prefix=<outputFilePrefix>
+raxml-ng --support --tree $besttree --bs-trees $bstrees --threads 1 --prefix $prefix
+```
+7. Plot trees using ggtree and ggtreeextra:
+Generate metadata files for the _P. oryzae_ tree ([PoryzaeMetadata.txt](/data/PoryzaeMetadata.txt)) and the _Pyricularia_ tree ([PyriculariaMetadata.txt](/data/PyriculariaMetadata.txt)). Run the [Meyer_et_al_Fig1.R](/scripts/Meyer_et_al_Fig1.R) script on the support tree obtained from step 6.
+
