@@ -18,7 +18,7 @@ Sequence header were standardized usign the [SimpleFastaHeaders.pl](/scripts/Sim
 ```bash
 perl SimpleFastaHeaders.pl contigs.fa <MyGenomeID>
 ```
-And contigs < 200 nt in length were removed using [CullShortSequences.pl](/scripts/CullShortSequences.pl):
+And contigs < 200 nt in length were removed using [CullShortContigs.pl](/scripts/CullShortContigs.pl):
 ```bash
 perl CullShortSequences.pl <MyGenomeID>_nh.fasta
 ```
