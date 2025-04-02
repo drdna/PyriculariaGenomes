@@ -14,7 +14,7 @@ After identifying the k value that produced the optimal assembly, this value was
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 2
 ```
-Sequence header were standardized usign the [SimpleFastaHeaders.pl](/scripts/SimpleFastaHeaders.pl) script:
+Sequence headers were standardized usign the [SimpleFastaHeaders.pl](/scripts/SimpleFastaHeaders.pl) script:
 ```bash
 perl SimpleFastaHeaders.pl contigs.fa <MyGenomeID>
 ```
