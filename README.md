@@ -40,6 +40,7 @@ The following settings were modified in the maker_opts.ctl file:
 - **augustus_species** = `magnaporthe_grisea`
 - **keep_preds** = `1`
 - **protein** = `/home/yourusername/genes/genbank/ncbi-protein-Magnaporthe_organism.fasta`
+
 Then run maker:
 ```bash
 maker 2>&1 | tee maker.log
