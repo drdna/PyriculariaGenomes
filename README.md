@@ -33,13 +33,13 @@ The MAKER configuration files were created:
 maker -CTL
 ```
 The following settings were modified in the maker_opts.ctl file:
-  genome=/home/<username>/genes/<MyGenome>_final.fasta
-  model_org= set to blank
-  repeat_protein= set to blank
-  snaphmm=/home/<username>/genes/Moryzae.hmm
-  augustus_species=magnaporthe_grisea
-  keep_preds=1
-  protein=/home/yourusername/genes/genbank/ncbi-protein-Magnaporthe_organism.fasta
+_genome=/home/<username>/genes/<MyGenome>_final.fasta_
+_model_org= set to blank_
+_repeat_protein= set to blank_
+_snaphmm=/home/<username>/genes/Moryzae.hmm_
+_augustus_species=magnaporthe_grisea_
+_keep_preds=1_
+_protein=/home/yourusername/genes/genbank/ncbi-protein-Magnaporthe_organism.fasta_
 Then run maker:
 ```bash
 maker 2>&1 | tee maker.log
