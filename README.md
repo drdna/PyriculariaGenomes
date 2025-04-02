@@ -1,38 +1,39 @@
 # PyriculariaGenomes
 Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 ## Trimming Sequence Reads
-Quality was first assessed using FASTQC and poor quality regions and adaptor contamination were then removed using Trimmomatic:
+1. Quality was first assessed using FASTQC
+2. Poor quality regions and adaptor contamination were then removed using Trimmomatic:
 ```bash
 trimmomatic PE -phred33 -trimlog MyGenome_logfile.txt <MyGenome>_1.fq.gz <MyGenome>_2.fq.gz <MyGenome>_1_paired.fq <MyGenome>_1_unpaired.fq <MyGenome>_2_paired.fq <MyGenome>_2_unpaired.fq ILLUMINACLIP<path/to/adaptors.fasta>:2:30:10 SLIDINGWINDOW:20:20 MINLEN:120
 ```
 ## Genome Assembly
-Genomes were assembled using a [velvetoptimiser](/scripts/velvetoptimiser_noclean.sh) script with k-mer values bracketing the value suggested by Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) starting from k -40 to k +40. Initailly a step size of 10 was used:
+1. Genomes were assembled using a [velvetoptimiser](/scripts/velvetoptimiser_noclean.sh) script with k-mer values bracketing the value suggested by Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) starting from k -40 to k +40. Initailly a step size of 10 was used:
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 10
 ```
-After identifying the k value that produced the optimal assembly, this value was then bracketed from k - 10 to k +10, with a step size of 2:
+2. After identifying the k value that produced the optimal assembly, this value was then bracketed from k - 10 to k +10, with a step size of 2:
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 2
 ```
-Sequence headers were standardized usign the [SimpleFastaHeaders.pl](/scripts/SimpleFastaHeaders.pl) script:
+3. Sequence headers were standardized usign the [SimpleFastaHeaders.pl](/scripts/SimpleFastaHeaders.pl) script:
 ```bash
 perl SimpleFastaHeaders.pl contigs.fa <MyGenomeID>
 ```
-And contigs < 200 nt in length were removed using [CullShortContigs.pl](/scripts/CullShortContigs.pl):
+4. And contigs < 200 nt in length were removed using [CullShortContigs.pl](/scripts/CullShortContigs.pl):
 ```bash
 perl CullShortSequences.pl <MyGenomeID>_nh.fasta
 ```
 ## Genome Validation
-Genome quality was assessed using BUSCO:
+1. Genome quality was assessed using BUSCO:
 ```bash
 busco --in <MyGenome>_Final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f
 ```
 ## Gene Prediction using MAKER
-The MAKER configuration files were created:
+1. The MAKER configuration files were created:
 ```bash
 maker -CTL
 ```
-The following settings were modified in the maker_opts.ctl file:
+2. The following settings were modified in the maker_opts.ctl file:
 - **genome** = `/home/<username>/genes/<MyGenome>_final.fasta`
 - **model_org** = *(set to blank)*
 - **repeat_protein** = *(set to blank)*
@@ -41,14 +42,15 @@ The following settings were modified in the maker_opts.ctl file:
 - **keep_preds** = `1`
 - **protein** = `/home/yourusername/genes/genbank/ncbi-protein-Magnaporthe_organism.fasta`
 
-Then run maker:
+3. Then run maker:
 ```bash
 maker 2>&1 | tee maker.log
 ```
 ## Secreted Protein Prediction
 1. Run SignalP5 on maker protein models:
 ```bash
-signalp -fasta <maker-proteins.fasta> -format short -prefix <genome-ID>
+fasta_merge -d <MyGenomeID>.maker.output/<MyGenomeID>_master_datastore_index.log -o <MyGenomeID>_genes
+signalp -fasta <MyGenomeID>_genes/<MyGenomeID>-proteins.fasta> -format short -prefix <MyGenomeID>
 ```
 2. Count secreted proteins:
 ```bash
