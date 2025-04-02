@@ -7,7 +7,7 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 trimmomatic PE -phred33 -trimlog MyGenome_logfile.txt <MyGenome>_1.fq.gz <MyGenome>_2.fq.gz <MyGenome>_1_paired.fq <MyGenome>_1_unpaired.fq <MyGenome>_2_paired.fq <MyGenome>_2_unpaired.fq ILLUMINACLIP<path/to/adaptors.fasta>:2:30:10 SLIDINGWINDOW:20:20 MINLEN:120
 ```
 ## Genome Assembly
-1. Genomes were assembled using a [velvetoptimiser](/scripts/velvetoptimiser_noclean.sh) script with k-mer values bracketing the value suggested by Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) starting from k -40 to k +40. Initailly a step size of 10 was used:
+1. Genomes were assembled using a [velvetoptimiser](/scripts/velvetoptimiser_noclean.sh) script with k-mer values bracketing the value suggested by Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) starting from k -40 to k +40. Initially a step size of 10 was used:
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 10
 ```
