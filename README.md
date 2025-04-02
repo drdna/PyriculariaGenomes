@@ -91,5 +91,5 @@ prefix=<outputFilePrefix>
 raxml-ng --support --tree $besttree --bs-trees $bstrees --threads 1 --prefix $prefix
 ```
 7. Plot trees using ggtree and ggtreeextra:
-Generate metadata files for the _P. oryzae_ tree ([PoryzaeMetadata.txt](/data/PoryzaeMetadata.txt)) and the _Pyricularia_ tree ([PyriculariaMetadata.txt](/data/PyriculariaMetadata.txt)). Open the files in FigTree and rotate branches to try and place all isolates from the same clade on branches that appear adjacent on the final tree. Run the [Meyer_et_al_Fig1.R](/scripts/Meyer_et_al_Fig1.R) script on the support trees obtained from step 6.
+Generate metadata files for the _P. oryzae_ tree ([PoryzaeMetadata.txt](/data/TreeBuilding/PoryzaeMetadata.txt)) and the _Pyricularia_ tree ([PyriculariaMetadata.txt](/data/TreeBuilding/PyriculariaMetadata.txt)). Open the files in FigTree and rotate branches to try and place all isolates from the same clade on branches that appear adjacent on the final tree. Run the [Meyer_et_al_Fig1.R](/scripts/Meyer_et_al_Fig1.R) script on the support trees obtained from step 6.
 
