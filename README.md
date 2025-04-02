@@ -1,6 +1,16 @@
 # PyriculariaGenomes
 Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
-## Secerted Protein Prediction
+## Trimming Sequence Reads
+Quality was first assessed using FASTQC and poor quality regions and adaptor contamination were then removed using Trimmomatic:
+```bash
+trimmomatic PE -phred33 -trimlog MyGenome_logfile.txt <MyGenome>_1.fq.gz <MyGenome>_2.fq.gz <MyGenome>_1_paired.fq <MyGenome>_1_unpaired.fq <MyGenome>_2_paired.fq <MyGenome>_2_unpaired.fq ILLUMINACLIP<path/to/adaptors.fasta>:2:30:10 SLIDINGWINDOW:20:20 MINLEN:120
+```
+## Genome Assembly
+Genomes were assembled using a [velvetoptimiser](/scripts/velvetoptimiser_noclean.sh) script with k-mer values ranging around the value suggested by Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/):
+```bash
+sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> <stepsize>
+```
+## Secreted Protein Prediction
 1. Run SignalP5 on maker protein models:
 ```bash
 signalp -fasta <maker-proteins.fasta> -format short -prefix <genome-ID>
