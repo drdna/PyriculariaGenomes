@@ -10,7 +10,7 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 7. [Secreted protein prediction](secreted-protein-prediction)
 8. [Call haplotypes for each individual strain](call-haplotypes-for-each-individual-strain)
 9. [Generate a fasta file based on the haplotype calls](generate-a-fasta-file-based-on-the-haplotype-calls)
-10.[Generate phylogenetic trees](generate-phylogenetic-trees)
+10. [Generate phylogenetic trees](generate-phylogenetic-trees)
 
 ## Assess Sequence Quality
 1. Log onto VM
@@ -67,7 +67,7 @@ blastn -query MoMitochondrion.fasta -subject MyGenomeID_final.fasta -outfmt '6qs
 ```bash
 sbatch BuscoSingularity.sh <MyGenomeID>_final.fasta
 ```
-## Gene Prediction using MAKER
+## Gene prediction using MAKER
 1. The MAKER configuration files were created:
 ```bash
 maker -CTL
