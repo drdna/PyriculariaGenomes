@@ -1,32 +1,63 @@
 # PyriculariaGenomes
 Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
-## Trimming Sequence Reads
-1. Quality was first assessed using FASTQC
-2. Poor quality regions and adaptor contamination were then removed using Trimmomatic:
+## Table of Contents
+1. [Assess sequence quality](#assess-sequence-quality)
+2. [Trim poor quality sequence and adaptor contamination](#trim-poor-quality-sequence-and-adaptor-contamination)
+3. [Post processign of genome assembly for submission to NCBI](#post-processign-of-genome-assembly-for-submission-to-NCBI)
+
+## Assess Sequence Quality
+1. Log onto VM
+2. Change into *sequences* directory
+3. Run FASTQC (v. 0.9.11) on sequence reads
+```
+fastqc MyGenomeID*fq.gz
+```
+4. Secure copy the resulting .html files to your local machine and double click to view reports in your default web browser
+5. Inspect FASTQC reports to look for poor quality sequence and adaptor contamination at the ends of reads
+6. Decide on suitable parameters for trimming (depends on individual sequence dataset)
+
+## Trim poor quality sequence and adaptor contamination
+1. Use Trimmomatic to remove poor quality regions and adaptor contamination. Note the following command includes parameters that perform well on most fungal datasets. The MINLEN parameter will need to be adjusted based on read lengths as well as fragment lengths as indicated by the distribution of adaptor contamination:
 ```bash
 trimmomatic PE -phred33 -trimlog MyGenome_logfile.txt <MyGenome>_1.fq.gz <MyGenome>_2.fq.gz <MyGenome>_1_paired.fq <MyGenome>_1_unpaired.fq <MyGenome>_2_paired.fq <MyGenome>_2_unpaired.fq ILLUMINACLIP<path/to/adaptors.fasta>:2:30:10 SLIDINGWINDOW:20:20 MINLEN:120
 ```
 ## Genome Assembly
-1. Genomes were assembled using a [velvetoptimiser](/scripts/velvetoptimiser_noclean.sh) script with k-mer values bracketing the value suggested by Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) starting from k -40 to k +40. Initially a step size of 10 was used:
+1. Transfer trimmed reads to the Morgan Compute Cluster using **scp**
+2. Create a designated assembly directory
+```
+mkdir MyGenomeID
+```
+3. Copy the reads into the assembly directory
+```
+cp MyGenomeID*_paired.fq.gz MyGenomeID
+```
+4. Use Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) to determine a reasonable k-mer value based on metrics for your trimmed reads
+5. Change into the MygenomeID directory
+6. Run the [VelvetOptimiser](/scripts/velvetoptimiser_noclean.sh) script running VelvetOptimiser v. 2.2.6 to perform assemblies at k-mer values bracketing the value suggested by  starting suggested by Velvet Advisor by 40 on each side (e.g. k -40 to k +40), with a step size of 10
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 10
 ```
-2. After identifying the k value that produced the optimal assembly, this value was then bracketed from k - 10 to k +10, with a step size of 2:
+7. Inspect the log file (XX-XX-XXXX-YY-YY-YY_Logfile.txt, where the Xs and Ys correspond to values for date and time, respectively). Identify the k value that produced the optimal assembly and perform a new assembly bracketing this value from optimalK - 10 to optimalK +10, using a step size of 2:
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 2
 ```
-3. Sequence headers were standardized usign the [SimpleFastaHeaders.pl](/scripts/SimpleFastaHeaders.pl) script:
+## Post processing of genome assembly for submission to NCBI
+1. Remove any contigs less than 200 nt in length using the [CullShortContigs.pl](/scripts/CullShortContigs.pl) script:
 ```bash
-perl SimpleFastaHeaders.pl contigs.fa <MyGenomeID>
+perl CullShortSequences.pl <MyGenomeID>.fasta
 ```
-4. And contigs < 200 nt in length were removed using [CullShortContigs.pl](/scripts/CullShortContigs.pl):
-```bash
-perl CullShortSequences.pl <MyGenomeID>_nh.fasta
+2. Re-number contigs for easier downstream processing using the [SimpleFastaHeaders.pl](SimpleFastaHeaders.pl) script:
+```
+perl SimpleFastaHeaders.pl <MyGenomeID>_temp.fasta
+```
+3. Identify mitochondrial contigs by aligning to a reference mitochondrial genome:
+```
+blastn -query MoMitochondrion.fasta -subject MyGenomeID_final.fasta -outfmt '6qseqid sseqid slen pident length mismatch gapopen qstart qend sstart send evalue score' | awk '$5/$3 > 0.9' > MoMitochondrion.MyGenomeID.BLAST
 ```
 ## Genome Validation
-1. Genome quality was assessed using BUSCO:
+1. Use the [BuscoSingularity.sh](BuscoSingularity.sh) script to run BUSCO. The command line used is as follows: busco --in <MyGenome>_final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f:
 ```bash
-busco --in <MyGenome>_Final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f
+sbatch BuscoSingularity.sh <MyGenomeID>_final.fasta
 ```
 ## Gene Prediction using MAKER
 1. The MAKER configuration files were created:
