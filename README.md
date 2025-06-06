@@ -3,7 +3,8 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 ## Table of Contents
 1. [Assess sequence quality](#assess-sequence-quality)
 2. [Trim poor quality sequence and adaptor contamination](#trim-poor-quality-sequence-and-adaptor-contamination)
-3. [Post processign of genome assembly for submission to NCBI](#post-processign-of-genome-assembly-for-submission-to-NCBI)
+3. [Post processign of genome assembly for submission to NCBI](#post-processing-of-genome-assembly-for-submission-to-ncbi)
+4. [Identify genetic variants](#identify-genetic-variants)
 
 ## Assess Sequence Quality
 1. Log onto VM
@@ -32,7 +33,7 @@ mkdir MyGenomeID
 cp MyGenomeID*_paired.fq.gz MyGenomeID
 ```
 4. Use Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) to determine a reasonable k-mer value based on metrics for your trimmed reads
-5. Change into the MygenomeID directory
+5. Change into the MyGenomeID directory
 6. Run the [VelvetOptimiser](/scripts/velvetoptimiser_noclean.sh) script running VelvetOptimiser v. 2.2.6 to perform assemblies at k-mer values bracketing the value suggested by  starting suggested by Velvet Advisor by 40 on each side (e.g. k -40 to k +40), with a step size of 10
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 10
@@ -46,7 +47,7 @@ sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 2
 ```bash
 perl CullShortSequences.pl <MyGenomeID>.fasta
 ```
-2. Re-number contigs for easier downstream processing using the [SimpleFastaHeaders.pl](SimpleFastaHeaders.pl) script:
+2. Re-number contigs for easier downstream processing using the [SimpleFastaHeaders.pl](/scripts/SimpleFastaHeaders.pl) script:
 ```
 perl SimpleFastaHeaders.pl <MyGenomeID>_temp.fasta
 ```
@@ -54,6 +55,21 @@ perl SimpleFastaHeaders.pl <MyGenomeID>_temp.fasta
 ```
 blastn -query MoMitochondrion.fasta -subject MyGenomeID_final.fasta -outfmt '6qseqid sseqid slen pident length mismatch gapopen qstart qend sstart send evalue score' | awk '$5/$3 > 0.9' > MoMitochondrion.MyGenomeID.BLAST
 ```
+## Identify genetic variants
+1. Use BLAST v. 2.16.0 to align <MyGenome>_final.fasta to a repeat-masked version of the B71 reference genome:
+```
+blastn -query B71v2sh_masked.fasta -subject <MyGenomeID>_final.fasta -evalue 1e-20 -max_target_seqs 20000 -outfmt '6 qseqid sseqid qstart qend sstart send btop' > B71v2sh.MyGenomeID.BLAST
+```
+2. Create a new directory for the BLAST results and copy the BLAST results into it:
+```
+mkdir MyGenomeID_BLAST
+mv B71v2sh.MyGenomeID.BLAST MyGenomeID_BLAST
+```
+3. Use the [CallVariants.sh](/scripts/CallVariants.sh) script to call the [StrictUnique.pm](StrictUnique.pm) module from iSNPcaller to perform variant calling:
+```
+sbatch CallVariants.sh MyGenomeID_BLAST
+```
+   
 ## Genome Validation
 1. Use the [BuscoSingularity.sh](BuscoSingularity.sh) script to run BUSCO. The command line used is as follows: busco --in <MyGenome>_final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f:
 ```bash
