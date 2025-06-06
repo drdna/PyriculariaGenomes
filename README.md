@@ -56,7 +56,7 @@ perl SimpleFastaHeaders.pl <MyGenomeID>_temp.fasta
 blastn -query MoMitochondrion.fasta -subject MyGenomeID_final.fasta -outfmt '6qseqid sseqid slen pident length mismatch gapopen qstart qend sstart send evalue score' | awk '$5/$3 > 0.9' > MoMitochondrion.MyGenomeID.BLAST
 ```
 ## Identify genetic variants
-1. Use BLAST v. 2.16.0 to align <MyGenomeID>_final.fasta to a repeat-masked version of the B71 reference genome:
+1. Use BLAST v. 2.16.0 to align \<MyGenomeID\>_final.fasta to a repeat-masked version of the B71 reference genome:
 ```
 blastn -query B71v2sh_masked.fasta -subject <MyGenomeID>_final.fasta -evalue 1e-20 -max_target_seqs 20000 -outfmt '6 qseqid sseqid qstart qend sstart send btop' > B71v2sh.MyGenomeID.BLAST
 ```
