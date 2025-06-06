@@ -6,7 +6,7 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 3. [Post processign of genome assembly for submission to NCBI](#post-processing-of-genome-assembly-for-submission-to-ncbi)
 4. [Genome validation](#genome-validation)
 5. [Identify genetic variants](#identify-genetic-variants)
-6. [Gene prediction using MAKER](gene-prediction-using-MAKER)
+6. [Gene prediction using MAKER](gene-prediction-using-maker)
 7. [Secreted protein prediction](secreted-protein-prediction)
 8. [Call haplotypes for each individual strain](call-haplotypes-for-each-individual-strain)
 9. [Generate a fasta file based on the haplotype calls](generate-a-fasta-file-based-on-the-haplotype-calls)
