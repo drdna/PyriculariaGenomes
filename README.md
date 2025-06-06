@@ -4,7 +4,8 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 1. [Assess sequence quality](#assess-sequence-quality)
 2. [Trim poor quality sequence and adaptor contamination](#trim-poor-quality-sequence-and-adaptor-contamination)
 3. [Post processign of genome assembly for submission to NCBI](#post-processing-of-genome-assembly-for-submission-to-ncbi)
-4. [Identify genetic variants](#identify-genetic-variants)
+4. [Genome validation](#genome-validation)
+5. [Identify genetic variants](#identify-genetic-variants)
 
 ## Assess Sequence Quality
 1. Log onto VM
@@ -55,20 +56,6 @@ perl SimpleFastaHeaders.pl <MyGenomeID>_temp.fasta
 ```
 blastn -query MoMitochondrion.fasta -subject MyGenomeID_final.fasta -outfmt '6qseqid sseqid slen pident length mismatch gapopen qstart qend sstart send evalue score' | awk '$5/$3 > 0.9' > MoMitochondrion.MyGenomeID.BLAST
 ```
-## Identify genetic variants
-1. Use BLAST v. 2.16.0 to align \<MyGenomeID\>_final.fasta to a repeat-masked version of the B71 reference genome:
-```
-blastn -query B71v2sh_masked.fasta -subject <MyGenomeID>_final.fasta -evalue 1e-20 -max_target_seqs 20000 -outfmt '6 qseqid sseqid qstart qend sstart send btop' > B71v2sh.MyGenomeID.BLAST
-```
-2. Create a new directory for the BLAST results and copy the BLAST results into it:
-```
-mkdir MyGenomeID_BLAST
-mv B71v2sh.MyGenomeID.BLAST MyGenomeID_BLAST
-```
-3. Use the [CallVariants.sh](/scripts/CallVariants.sh) script to call the [StrictUnique.pm](StrictUnique.pm) module from iSNPcaller to perform variant calling:
-```
-sbatch CallVariants.sh MyGenomeID_BLAST
-```
    
 ## Genome Validation
 1. Use the [BuscoSingularity.sh](BuscoSingularity.sh) script to run BUSCO. The command line used is as follows: busco --in <MyGenome>_final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f:
@@ -103,34 +90,42 @@ signalp -fasta <MyGenomeID>_genes/<MyGenomeID>-proteins.fasta> -format short -pr
 ```bash
 f=$(ls <signalP-summary-file>); echo ${f/_*/} | tr "\n" "\t"; awk '$2 ~ /^SP/' $f |  wc -l
 ```
-## Variant Calling
-SNPs were called from masked genome alignments using the StrictUnique4 module from iSNP caller.
-1. BLAST masked reference genome against assemblies:
-```bash
-mkdir B71v2_BLAST
-cd MASKED_GENOMES
-for f in $(ls *fasta); do blastn -query ../B71v2_masked.fasta -subject $f -evalue 1e-20 -max_target_seqs 20000 -outfmt '6 qseqid sseqid qstart qend sstart send btop' > ../B71v2_BLAST/B71v2.${f/_*/}.BLAST; done
+## Identify genetic variants
+1. Use BLAST v. 2.16.0 to align \<MyGenomeID\>_final.fasta to a repeat-masked version of the B71 reference genome:
 ```
-2. Call SNPs:
-```bash
-cd ..
-perl Run_SU4.pl B71v2_BLAST B71v2_SNPs
+blastn -query B71v2sh_masked.fasta -subject <MyGenomeID>_final.fasta -evalue 1e-20 -max_target_seqs 20000 -outfmt '6 qseqid sseqid qstart qend sstart send btop' > B71v2sh.MyGenomeID.BLAST
 ```
-3. Mask sites in reference genome that were not queried in ALL genomes:
-```bash
-perl Create_alignment_strings_multiBLAST.pl B71v2_masked.fasta B71v2_BLAST
+2. Create a new directory for the BLAST results and copy the BLAST results into it:
 ```
-4. Generate .fasta file from SNP calls:
-```bash
-perl Generate_FASTA.pl PoTreeStrains.txt B71v2_SNPs B71v2.B71v2_BLAST_alignments
+mkdir MyGenomeID_BLAST
+mv B71v2sh.MyGenomeID.BLAST MyGenomeID_BLAST
 ```
-5. Build phylogenetic tree using RAXML:
+3. Copy the BLAST output file into the CLASS_BLASTS directory
+4. Use the [CallVariants.sh](/scripts/CallVariants.sh) script to call the [StrictUnique.pm](StrictUnique.pm) module from iSNPcaller to perform variant calling:
+```
+sbatch CallVariants.sh MyGenomeID_BLAST
+```
+5. Copy the SNP call output file into the CLASS SNPs directory
+
+## Call haplotypes for each individual strain
+1. Use the [Generate_haplotypes.pl](/scripts/Generate_haplotypes.pl) script to gather SNP calls for each genome and then check to make sure that SNPs is in a region that is unique in both the query genome and the reference. Arguments are as follows:
+Generate_haplotypes.pl <SNP_directory> <BLAST_directory> <output_filename> <reference-sequence> <sequence-prefix>
+```
+perl Generate_haplotypes.pl CLASS_SNPS CLASS_BLASTS ClassHaplotypes B71v2sh_masked.fasta sequence
+```
+## Generate a fasta file based on the haplotype calls
+1. Use the Haplotypes2Fasta.pl script to generate the haplotype calls for a pre-determined list of strains:
+```bash
+perl Haplotypes2Fasta.pl PoTreeStrains.txt ClassHaplotypes.complete.txt
+```
+## Generate phylogenetic trees
+1. Build a phylogenetic tree using RAxML v. 8.2.12:
 ```bash
 fasta=<fasta_file>
 prefix=<outputFilePrefix>
-raxmlHPC-PTHREADS /Applications/standard-RAxML-master/raxmlHPC-PTHREADS -T 12 -m GTRCAT -n $prefix -s $fasta -p 1234 -f a -x 4321 -# autoMRE
+raxmlHPC-PTHREADS -T 12 -m GTRCAT -n $prefix -s $fasta -p 1234 -f a -x 4321 -# autoMRE
 ```
-6. Add support values to nodes/branches:
+2. Add support values to nodes/branches using RAxML-NG v. 1.2.0:
 ```bash
 besttree=<bestTreeFile>
 bstrees=<bootstrapTreesFile>
