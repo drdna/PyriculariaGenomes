@@ -3,14 +3,15 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 ## Table of Contents
 1. [Assess sequence quality](#assess-sequence-quality)
 2. [Trim poor quality sequence and adaptor contamination](#trim-poor-quality-sequence-and-adaptor-contamination)
-3. [Post processign of genome assembly for submission to NCBI](#post-processing-of-genome-assembly-for-submission-to-ncbi)
-4. [Genome validation](#genome-validation)
-5. [Identify genetic variants](#identify-genetic-variants)
-6. [Gene prediction using MAKER](#gene-prediction-using-maker)
-7. [Secreted protein prediction](#secreted-protein-prediction)
-8. [Call haplotypes for each individual strain](#call-haplotypes-for-each-individual-strain)
-9. [Generate a fasta file based on the haplotype calls](#generate-a-fasta-file-based-on-the-haplotype-calls)
-10. [Generate phylogenetic trees](#generate-phylogenetic-trees)
+3. [Genome assembly](#genome_assembly)
+4. [Post processing of genome assembly for submission to NCBI](#post-processing-of-genome-assembly-for-submission-to-ncbi)
+5. [Genome validation](#genome-validation)
+6. [Identify genetic variants](#identify-genetic-variants)
+7. [Gene prediction using MAKER](#gene-prediction-using-maker)
+8. [Secreted protein prediction](#secreted-protein-prediction)
+9. [Call haplotypes for each individual strain](#call-haplotypes-for-each-individual-strain)
+10. [Generate a fasta file based on the haplotype calls](#generate-a-fasta-file-based-on-the-haplotype-calls)
+11. [Generate phylogenetic trees](#generate-phylogenetic-trees)
 
 ## Assess Sequence Quality
 1. Log onto VM
