@@ -114,10 +114,12 @@ sbatch CallVariants.sh MyGenomeID_BLAST
 5. Copy the SNP call output file into the CLASS SNPs directory
 
 ## Call haplotypes for each individual strain
-1. Use the [Generate_haplotypes.pl](/scripts/Generate_haplotypes.pl) script to gather SNP calls for each genome and then check to make sure that SNPs is in a region that is unique in both the query genome and the reference. Arguments are as follows:
-Generate_haplotypes.pl <SNP_directory> <BLAST_directory> <output_filename> <reference-sequence> <sequence-prefix>
+1. Use the [Generate_haplotypes.pl](/scripts/Generate_haplotypes.pl) script to gather SNP calls for each genome and then check to make sure that SNPs is in a region that is unique in both the query genome and the reference. Print out two sets of haplotype data (1 = ref allele; 0 = alt allele; 9 = missing data/repeat region): a) all variant sites; and b) only sites called in every strain.
+2. Arguments are as follows:
+Generate_haplotypes.pl <strain-list> CLASS_SNPs CLASS_BLASTs <output_filename> <reference-sequence> <sequence-prefix>
 ```
-perl Generate_haplotypes.pl CLASS_SNPS CLASS_BLASTS ClassHaplotypes B71v2sh_masked.fasta sequence
+perl Generate_haplotypes.pl PoABT480strains.txt CLASS_SNPS CLASS_BLASTS PoABT480Haplotypes B71v2sh_masked.fasta sequence
+perl Generate_haplotypes.pl PyricABT480strains.txt CLASS_SNPS CLASS_BLASTS PyricABT480Haplotypes B71v2sh_masked.fasta sequence
 ```
 ## Generate a fasta file based on the haplotype calls
 1. Use the Haplotypes2Fasta.pl script to generate the haplotype calls for a pre-determined list of strains:
