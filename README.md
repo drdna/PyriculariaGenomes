@@ -3,7 +3,7 @@ Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
 ## Table of Contents
 1. [Assess sequence quality](#assess-sequence-quality)
 2. [Trim poor quality sequence and adaptor contamination](#trim-poor-quality-sequence-and-adaptor-contamination)
-3. [Genome assembly](#genome_assembly)
+3. [Genome assembly](#genome-assembly)
 4. [Post processing of genome assembly for submission to NCBI](#post-processing-of-genome-assembly-for-submission-to-ncbi)
 5. [Genome validation](#genome-validation)
 6. [Identify genetic variants](#identify-genetic-variants)
