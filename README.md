@@ -25,7 +25,7 @@ _Steps 1 through 7 were completed by undergraduate students as independent resea
 ```
 fastqc MyGenomeID*fq.gz
 ```
-4. Secure copy the resulting .html files to your local machine and double click to view reports in your default web browser
+4. Secure copy the resulting .html files to your local machine and double click on the file icons to view the quality reports in your default web browser
 5. Inspect FASTQC reports to look for poor quality sequence and adaptor contamination at the ends of reads
 6. Decide on suitable parameters for trimming (depends on individual sequence dataset)
 
