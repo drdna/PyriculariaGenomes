@@ -25,7 +25,7 @@ fastqc MyGenomeID*fq.gz
 6. Decide on suitable parameters for trimming (depends on individual sequence dataset)
 
 ## Trim poor quality sequence and adaptor contamination
-1. Use Trimmomatic to remove poor quality regions and adaptor contamination. Note the following command includes parameters that perform well on most fungal datasets. The MINLEN parameter will need to be adjusted based on read lengths as well as fragment lengths as indicated by the distribution of adaptor contamination:
+1. Use Trimmomatic (v. 0.38) to remove poor quality regions and adaptor contamination. Note the following command includes parameters that perform well on most fungal datasets. The MINLEN parameter will need to be adjusted based on read lengths as well as fragment lengths as indicated by the distribution of adaptor contamination:
 ```bash
 trimmomatic PE -phred33 -trimlog MyGenome_logfile.txt <MyGenome>_1.fq.gz <MyGenome>_2.fq.gz <MyGenome>_1_paired.fq <MyGenome>_1_unpaired.fq <MyGenome>_2_paired.fq <MyGenome>_2_unpaired.fq ILLUMINACLIP<path/to/adaptors.fasta>:2:30:10 SLIDINGWINDOW:20:20 MINLEN:120
 ```
@@ -41,7 +41,7 @@ cp MyGenomeID*_paired.fq.gz MyGenomeID
 ```
 4. Use Velvet Advisor (https://dna.med.monash.edu/~torsten/velvet_advisor/) to determine a reasonable k-mer value based on metrics for your trimmed reads
 5. Change into the MyGenomeID directory
-6. Run the [VelvetOptimiser](/scripts/velvetoptimiser_noclean.sh) script running VelvetOptimiser v. 2.2.6 to perform assemblies at k-mer values bracketing the value suggested by  starting suggested by Velvet Advisor by 40 on each side (e.g. k -40 to k +40), with a step size of 10
+6. Run the [VelvetOptimiser](/scripts/velvetoptimiser_noclean.sh) script running VelvetOptimiser (v. 2.2.6) to perform assemblies at k-mer values bracketing the value suggested by  starting suggested by Velvet Advisor by 40 on each side (e.g. k -40 to k +40), with a step size of 10
 ```bash
 sbatch velvetoptimser_noclean.sh <MyGenome_prefix> <starting_k> <ending_k> 10
 ```
@@ -58,11 +58,14 @@ perl CullShortSequences.pl <MyGenomeID>.fasta
 ```
 perl SimpleFastaHeaders.pl <MyGenomeID>_temp.fasta
 ```
-3. Identify mitochondrial contigs by aligning to a reference mitochondrial genome:
+3. Identify mitochondrial contigs by aligning to a reference mitochondrial genome. Save results for those contigs that align to mitochondrial sequences over > 90% of their length:
 ```
 blastn -query MoMitochondrion.fasta -subject MyGenomeID_final.fasta -outfmt '6qseqid sseqid slen pident length mismatch gapopen qstart qend sstart send evalue score' | awk '$5/$3 > 0.9' > MoMitochondrion.MyGenomeID.BLAST
 ```
-   
+4. Create a list of mitochondrial contigs for uploading to the sequence assignment tab of the NCBI genome submission:
+```bash
+awk '{print $2 "\t" mitochondrion}' MoMitochondrion.MyGenomeID.BLAST > MyGenomeID_mitochondrial.csv
+```
 ## Genome validation
 1. Use the [BuscoSingularity.sh](BuscoSingularity.sh) script to run BUSCO. The command line used is as follows: busco --in <MyGenome>_final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f:
 ```bash
