@@ -23,6 +23,6 @@ snpsfolder=${blastfolder/BLAST/SNPs}
 export PERL5LIB=/project/farman_s25abt480/PERL_MODULES:$PERL5LIB
 export PERL5LIB=/project/farman_uksr/PERL_MODULES:$PERL5LIB
 
-perl /project/farman_s25abt480/SCRIPTs/Run_SU4.pl $blastfolder $snpsfolder
+perl /project/farman_s25abt480/SCRIPTs/Run_SNPcall.pl $blastfolder $snpsfolder
 
 
