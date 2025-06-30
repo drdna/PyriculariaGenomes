@@ -1,6 +1,4 @@
-package StrictUnique4;
-
-### This version does not assign a chromosome length hash based on B71 reference genome
+package StrictUnique;
 
 ### Reads BLAST reports and reports uniquely aligned nucleotide positions
 
@@ -8,11 +6,7 @@ package StrictUnique4;
 
 ### or a '1' (uniquely aligned)
 
-### Usage: StrictUnique.pm <inDirectory> <outDirectory> 
-
 ##############################
-#
-# SStrictUnique2.pm
 #
 # written by Mark L. Farman
 #
@@ -20,8 +14,6 @@ package StrictUnique4;
 #
 ##############################
 
-#use strict;
-#use warnings;
 use Cwd qw(cwd);
 use File::Path;
 use File::Copy;
@@ -47,7 +39,6 @@ use File::Copy;
 
 sub SNPs {
 
-#  if(@ARGV != 2) { die "Usage: Run_SNPcaller.pl <indir> <outdir>\n"}
   ($indir, $outdir) = @{$_[0]};
   print "$indir, $outdir\n";
   $logdir = "$outdir/LOGS";
