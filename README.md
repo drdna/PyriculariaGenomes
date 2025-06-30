@@ -67,7 +67,7 @@ blastn -query MoMitochondrion.fasta -subject MyGenomeID_final.fasta -outfmt '6qs
 awk '{print $2 "\t" mitochondrion}' MoMitochondrion.MyGenomeID.BLAST > MyGenomeID_mitochondrial.csv
 ```
 ## Genome validation
-1. Use the [BuscoSingularity.sh](BuscoSingularity.sh) script to run BUSCO. The command line used is as follows: busco --in <MyGenome>_final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f:
+1. Use the [BuscoSingularity.sh](/scripts/BuscoSingularity.sh) script to run BUSCO. The command line used is as follows: busco --in <MyGenome>_final.fasta --out <MyGenome>_busco --mode genome --lineage_dataset ascomycota_odb10 -f:
 ```bash
 sbatch BuscoSingularity.sh <MyGenomeID>_final.fasta
 ```
@@ -110,7 +110,7 @@ mkdir MyGenomeID_BLAST
 mv B71v2sh.MyGenomeID.BLAST MyGenomeID_BLAST
 ```
 3. Copy the BLAST output file into the CLASS_BLASTS directory
-4. Use the [CallVariants.sh](/scripts/CallVariants.sh) script to call the [StrictUnique.pm](StrictUnique.pm) module from iSNPcaller to perform variant calling:
+4. Use the [CallVariants.sh](/scripts/CallVariants.sh) script to call the [StrictUnique.pm](/scripts/StrictUnique.pm) module from iSNPcaller to perform variant calling:
 ```
 sbatch CallVariants.sh MyGenomeID_BLAST
 ```
