@@ -1,8 +1,7 @@
 # PyriculariaGenomes
 
-## Methods, Code, and Data
+## Methods, Code, and Data for the project **Genome Assemblies for _Pyricularia_ Species**  
 
-**Genome Assemblies for _Pyricularia_ Species**  
 _Steps 1 through 7 were completed by undergraduate students as independent research projects in the following classes:_  
 **ABT 480 / CS 485G: Special Topics – Applied Bioinformatics**
 
