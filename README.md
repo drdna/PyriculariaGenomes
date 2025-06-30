@@ -1,5 +1,6 @@
 # PyriculariaGenomes
-Methods, Code and Data for the Project Genome Assemblies for Pyricularia species
+Methods, Code and Data for the project Genome Assemblies for _Pyricularia_ species. Steps 1 through 7 were completed by undergraduate students as independent research projects performed in the classes: ABT 480 / CS 485G: Special Topics - Applied Bioinformatics.
+-------------------------------------------------------
 ## Table of Contents
 1. [Assess sequence quality](#assess-sequence-quality)
 2. [Trim poor quality sequence and adaptor contamination](#trim-poor-quality-sequence-and-adaptor-contamination)
