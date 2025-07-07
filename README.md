@@ -77,11 +77,32 @@ awk '{print $2 "\t" mitochondrion}' MoMitochondrion.MyGenomeID.BLAST > MyGenomeI
 sbatch BuscoSingularity.sh <MyGenomeID>_final.fasta
 ```
 ## Gene prediction using MAKER
-1. The MAKER configuration files were created:
+First, we created a hidden markov model from a genome annotation of _P. oryzae_ strain FH that was generated using FGENESH:
+1. convert gff to zff format:
+```bash
+maker2zff FH_V2_maker.gff
+```
+2. Categorize the predicted genes found in the FH annotation:
+```bash
+fathom genome.ann genome.dna -categorize 1000
+```
+3. Extract genes plus 1000 nucleotides of flanking sequence
+```bash
+fathom uni.ann uni.dna -export 1000 -plus
+```
+4. Generate the model parameters for each set of features:
+```bash
+forge export.ann export.dna
+```
+6. Collate the model parameters into a hidden Markov model file
+```bash
+hmm-assembler.pl Moryzae . > Moryzae.hmm
+```
+7. Generate the MAKER configuration files:
 ```bash
 maker -CTL
 ```
-2. The following settings were modified in the maker_opts.ctl file:
+8. Modify the following settings in the maker_opts.ctl file:
 - **genome** = `/home/<username>/genes/<MyGenome>_final.fasta`
 - **model_org** = *(set to blank)*
 - **repeat_protein** = *(set to blank)*
@@ -90,9 +111,11 @@ maker -CTL
 - **keep_preds** = `1`
 - **protein** = `/home/yourusername/genes/genbank/ncbi-protein-Magnaporthe_organism.fasta`
 
+**Note:** we use 9,787 _P. oryzae_ reference proteins from NCBI (ncbi-protein-Magnaporthe_organism.fasta) as evidences for MAKER gene modeling.
+
 3. Then run maker:
 ```bash
-maker 2>&1 | tee maker.log
+maker 2>&1 --genome <MyGenomeID.fasta> | tee maker.log
 ```
 ## Secreted Protein Prediction
 1. Run SignalP5 on maker protein models:
