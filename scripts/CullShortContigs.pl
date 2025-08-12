@@ -9,9 +9,9 @@
 
   $Fasta = $ARGV[0];
 
-  ($Genome_ID = $Fasta) =~ s/_.+//;
+  ($Genome_ID = $Fasta) =~ s/_.+|\.fasta//;
 
-  ($FastaOut = $Fasta) =~ s/_nh/_final/;
+  ($FastaOut = $Fasta) =~ s/_.+|\.fasta/_temp.fasta/;
 
   open(FASTAOUT, '>', $FastaOut) || die "Can't create output file\n";
 
